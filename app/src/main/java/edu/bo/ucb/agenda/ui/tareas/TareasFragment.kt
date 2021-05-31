@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +21,9 @@ import edu.bo.ucb.agenda.databinding.FragmentTareasBinding
 import dagger.hilt.android.AndroidEntryPoint
 import edu.bo.ucb.agenda.data.OrdenFiltro
 import edu.bo.ucb.agenda.data.Tarea
+import edu.bo.ucb.agenda.util.exhaustive
 import edu.bo.ucb.agenda.util.onQueryTextChange
+import kotlinx.android.synthetic.main.fragment_tareas.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -56,6 +59,10 @@ class TareasFragment : Fragment(R.layout.fragment_tareas), TareasAdapter.onItemC
                     viewModel.alHacerSwipe(tarea)
                 }
             }).attachToRecyclerView(recyclerViewTareas)
+
+            fab_añadir_tarea.setOnClickListener{
+                viewModel.alPresionarAgregarTarea()
+            }
         }
         viewModel.tareas.observe(viewLifecycleOwner) {
             tareasAdapter.submitList(it)
@@ -70,7 +77,15 @@ class TareasFragment : Fragment(R.layout.fragment_tareas), TareasAdapter.onItemC
                                 viewModel.alDeshacer(event.tarea)
                             }.show()
                     }
-                }
+                    is TareasViewModel.EventoTareas.NavegarAPantallaAgregar -> {
+                        val action = TareasFragmentDirections.actionTareasFragmentToAgregarEditarTareaFragment(null,"Nueva Tarea")
+                        findNavController().navigate(action)
+                    }
+                    is TareasViewModel.EventoTareas.NavegarAPantallaEditar -> {
+                        val action = TareasFragmentDirections.actionTareasFragmentToAgregarEditarTareaFragment(event.tarea,"Editar Tarea")
+                        findNavController().navigate(action)
+                    }
+                }.exhaustive
             }
         }
 

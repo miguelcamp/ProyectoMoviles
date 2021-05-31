@@ -1,9 +1,8 @@
 package edu.bo.ucb.agenda.ui.tareas
 
+import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import edu.bo.ucb.agenda.data.ControladorPreferencias
 import edu.bo.ucb.agenda.data.OrdenFiltro
 import edu.bo.ucb.agenda.data.Tarea
@@ -14,9 +13,10 @@ import kotlinx.coroutines.launch
 
 class TareasViewModel @ViewModelInject constructor(
     private val tareaDao : TareaDao,
-    private val controladorPreferencias: ControladorPreferencias
+    private val controladorPreferencias: ControladorPreferencias,
+    @Assisted private val state: SavedStateHandle
 ) : ViewModel() {
-    val searchQuery = MutableStateFlow("")
+    val searchQuery = state.getLiveData("searchQuery","")
 
     val flowPreferencias = controladorPreferencias.flowPreferencias
 
@@ -24,7 +24,7 @@ class TareasViewModel @ViewModelInject constructor(
     val eventoTareas = CanalEventoTareas.receiveAsFlow()
 
     private val tasksFlow = combine(
-        searchQuery,
+        searchQuery.asFlow(),
         flowPreferencias
 
     ) { query, filtrarPreferencias ->
@@ -44,8 +44,8 @@ class TareasViewModel @ViewModelInject constructor(
         controladorPreferencias.actualizarOcultarCompletadas(ocultarCompletadas)
     }
 
-    fun alSeleccionarTarea(tarea: Tarea){
-
+    fun alSeleccionarTarea(tarea: Tarea) = viewModelScope.launch {
+        CanalEventoTareas.send(EventoTareas.NavegarAPantallaEditar(tarea))
     }
 
     fun alCambiarCheckTarea(tarea: Tarea, isChecked: Boolean) = viewModelScope.launch {
@@ -61,7 +61,13 @@ class TareasViewModel @ViewModelInject constructor(
         tareaDao.insert(tarea)
     }
 
+    fun alPresionarAgregarTarea() = viewModelScope.launch {
+        CanalEventoTareas.send(EventoTareas.NavegarAPantallaAgregar)
+    }
+
     sealed class EventoTareas {
+        object NavegarAPantallaAgregar : EventoTareas()
+        data class NavegarAPantallaEditar(val tarea: Tarea) : EventoTareas()
         data class MostrarMensajeDeshacer(val tarea: Tarea) : EventoTareas()
     }
 

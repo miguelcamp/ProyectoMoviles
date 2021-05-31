@@ -8,6 +8,24 @@
     <fragment
         android:id="@+id/tareasFragment"
         android:name="edu.bo.ucb.agenda.ui.tareas.TareasFragment"
-        android:label="fragment_tareas"
-        tools:layout="@layout/fragment_tareas" />
+        android:label="Tareas"
+        tools:layout="@layout/fragment_tareas">
+        <action
+            android:id="@+id/action_tareasFragment_to_agregarEditarTareaFragment"
+            app:destination="@id/agregarEditarTareaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/agregarEditarTareaFragment"
+        android:name="edu.bo.ucb.agenda.ui.agregareditarTarea.AgregarEditarTareaFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_anadir_editar_tarea" >
+        <argument
+            android:name="tarea"
+            app:argType="edu.bo.ucb.agenda.data.Tarea"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </fragment>
 </navigation>
