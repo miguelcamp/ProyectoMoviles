@@ -6,6 +6,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import edu.bo.ucb.agenda.data.ControladorPreferencias
 import edu.bo.ucb.agenda.data.OrdenFiltro
+import edu.bo.ucb.agenda.data.Tarea
 import edu.bo.ucb.agenda.data.TareaDao
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -31,6 +32,9 @@ class TareasViewModel @ViewModelInject constructor(
         tareaDao.getTareas(query, filtrarPreferencias.ordenFiltro, filtrarPreferencias.ocultarCompletadas)
     }
 
+    val tareas = tasksFlow.asLiveData()
+
+
     fun alSeleccionarOrdenFiltro(ordenFiltro: OrdenFiltro) = viewModelScope.launch {
         controladorPreferencias.actualizarOrdenFiltro(ordenFiltro)
     }
@@ -39,5 +43,14 @@ class TareasViewModel @ViewModelInject constructor(
         controladorPreferencias.actualizarOcultarCompletadas(ocultarCompletadas)
     }
 
-    val tareas = tasksFlow.asLiveData()
+    fun alSeleccionarTarea(tarea: Tarea){
+
+    }
+
+    fun alCambiarCheckTarea(tarea: Tarea, isChecked: Boolean) = viewModelScope.launch {
+        tareaDao.update(tarea.copy(completada = isChecked))
+    }
+
+
+
 }

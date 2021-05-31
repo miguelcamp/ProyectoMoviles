@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,12 +16,13 @@ import edu.bo.ucb.agenda.R
 import edu.bo.ucb.agenda.databinding.FragmentTareasBinding
 import dagger.hilt.android.AndroidEntryPoint
 import edu.bo.ucb.agenda.data.OrdenFiltro
+import edu.bo.ucb.agenda.data.Tarea
 import edu.bo.ucb.agenda.util.onQueryTextChange
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class TareasFragment : Fragment(R.layout.fragment_tareas) {
+class TareasFragment : Fragment(R.layout.fragment_tareas), TareasAdapter.onItemClickListener {
     private val viewModel: TareasViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -28,7 +30,7 @@ class TareasFragment : Fragment(R.layout.fragment_tareas) {
 
         val binding = FragmentTareasBinding.bind(view)
 
-        val tareasAdapter = TareasAdapter()
+        val tareasAdapter = TareasAdapter(this)
 
         binding.apply {
             recyclerViewTareas.apply {
@@ -42,6 +44,16 @@ class TareasFragment : Fragment(R.layout.fragment_tareas) {
         }
         setHasOptionsMenu(true)
     }
+
+    override fun onItemClick(tarea: Tarea) {
+        viewModel.alSeleccionarTarea(tarea)
+    }
+
+    override fun onCheckBoxClick(tarea: Tarea, isChecked: Boolean) {
+        viewModel.alCambiarCheckTarea(tarea,isChecked)
+    }
+
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_fragment_tareas, menu)
 

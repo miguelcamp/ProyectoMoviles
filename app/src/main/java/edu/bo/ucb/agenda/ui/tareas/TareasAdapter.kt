@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import edu.bo.ucb.agenda.data.Tarea
 import edu.bo.ucb.agenda.databinding.ItemTareaBinding
 
-class TareasAdapter : ListAdapter<Tarea, TareasAdapter.TareasViewHolder>(DiffCallback()) {
+class TareasAdapter(private val listener: onItemClickListener) : ListAdapter<Tarea, TareasAdapter.TareasViewHolder>(DiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TareasViewHolder {
         val  binding = edu.bo.ucb.agenda.databinding.ItemTareaBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TareasViewHolder(binding)
@@ -20,8 +20,26 @@ class TareasAdapter : ListAdapter<Tarea, TareasAdapter.TareasViewHolder>(DiffCal
         holder.bind(itemActual)
     }
 
-    class TareasViewHolder(private val binding: ItemTareaBinding):RecyclerView.ViewHolder(binding.root){
+    inner class TareasViewHolder(private val binding: ItemTareaBinding):RecyclerView.ViewHolder(binding.root){
 
+        init {
+            binding.apply {
+                root.setOnClickListener{
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION){
+                        val tarea = getItem(position)
+                        listener.onItemClick(tarea)
+                    }
+                }
+                checkboxCompletado.setOnClickListener{
+                    val position = adapterPosition
+                    if(position != RecyclerView.NO_POSITION){
+                        val tarea = getItem(position)
+                        listener.onCheckBoxClick(tarea, checkboxCompletado.isChecked)
+                    }
+                }
+            }
+        }
         fun bind(tarea: Tarea){
             binding.apply {
                 checkboxCompletado.isChecked = tarea.completada
@@ -30,6 +48,10 @@ class TareasAdapter : ListAdapter<Tarea, TareasAdapter.TareasViewHolder>(DiffCal
                 labelPrioridad.isVisible = tarea.importante
             }
         }
+    }
+    interface onItemClickListener{
+        fun onItemClick(tarea: Tarea)
+        fun onCheckBoxClick(tarea: Tarea,isChecked:Boolean)
     }
     class DiffCallback : DiffUtil.ItemCallback<Tarea>(){
         override fun areItemsTheSame(oldItem: Tarea, newItem: Tarea) =
