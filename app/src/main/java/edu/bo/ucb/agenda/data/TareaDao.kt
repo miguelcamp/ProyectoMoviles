@@ -1,7 +1,6 @@
 package edu.bo.ucb.agenda.data
 
 import androidx.room.*
-import edu.bo.ucb.agenda.ui.tareas.OrdenFiltro
 import kotlinx.coroutines.flow.Flow
 
 @Dao

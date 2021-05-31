@@ -3,30 +3,41 @@ package edu.bo.ucb.agenda.ui.tareas
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
+import edu.bo.ucb.agenda.data.ControladorPreferencias
+import edu.bo.ucb.agenda.data.OrdenFiltro
 import edu.bo.ucb.agenda.data.TareaDao
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.launch
 
 class TareasViewModel @ViewModelInject constructor(
-    private val tareaDao : TareaDao
+    private val tareaDao : TareaDao,
+    private val controladorPreferencias: ControladorPreferencias
 ) : ViewModel() {
     val searchQuery = MutableStateFlow("")
 
-    val ordenFiltro = MutableStateFlow(OrdenFiltro.POR_FECHA)
-    val ocultarCompletadas = MutableStateFlow(false)
+    val flowPreferencias = controladorPreferencias.flowPreferencias
 
     private val tasksFlow = combine(
         searchQuery,
-        ordenFiltro,
-        ocultarCompletadas
-    ) { query, ordenFiltro, ocultarCompletadas ->
-        Triple(query, ordenFiltro, ocultarCompletadas)
-    }.flatMapLatest { (query, ordenFiltro, ocultarCompletadas) ->
-        tareaDao.getTareas(query, ordenFiltro, ocultarCompletadas)
+        flowPreferencias
+
+    ) { query, filtrarPreferencias ->
+        Pair(query, filtrarPreferencias)
+    }.flatMapLatest { (query, filtrarPreferencias) ->
+        tareaDao.getTareas(query, filtrarPreferencias.ordenFiltro, filtrarPreferencias.ocultarCompletadas)
+    }
+
+    fun alSeleccionarOrdenFiltro(ordenFiltro: OrdenFiltro) = viewModelScope.launch {
+        controladorPreferencias.actualizarOrdenFiltro(ordenFiltro)
+    }
+
+    fun alSeleccionarOcultarCompletadas(ocultarCompletadas: Boolean) = viewModelScope.launch {
+        controladorPreferencias.actualizarOcultarCompletadas(ocultarCompletadas)
     }
 
     val tareas = tasksFlow.asLiveData()
 }
-enum class OrdenFiltro { POR_NOMBRE, POR_FECHA }
