@@ -11,13 +11,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import edu.bo.ucb.agenda.R
 import edu.bo.ucb.agenda.databinding.FragmentTareasBinding
 import dagger.hilt.android.AndroidEntryPoint
 import edu.bo.ucb.agenda.data.OrdenFiltro
 import edu.bo.ucb.agenda.data.Tarea
 import edu.bo.ucb.agenda.util.onQueryTextChange
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -38,10 +42,38 @@ class TareasFragment : Fragment(R.layout.fragment_tareas), TareasAdapter.onItemC
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(true)
             }
+            ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT ){
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val tarea = tareasAdapter.currentList[viewHolder.adapterPosition]
+                    viewModel.alHacerSwipe(tarea)
+                }
+            }).attachToRecyclerView(recyclerViewTareas)
         }
         viewModel.tareas.observe(viewLifecycleOwner) {
             tareasAdapter.submitList(it)
         }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.eventoTareas.collect{ event ->
+                when (event){
+                    is TareasViewModel.EventoTareas.MostrarMensajeDeshacer -> {
+                        Snackbar.make(requireView(),"Tarea eliminada", Snackbar.LENGTH_LONG)
+                            .setAction("Deshacer"){
+                                viewModel.alDeshacer(event.tarea)
+                            }.show()
+                    }
+                }
+            }
+        }
+
         setHasOptionsMenu(true)
     }
 
