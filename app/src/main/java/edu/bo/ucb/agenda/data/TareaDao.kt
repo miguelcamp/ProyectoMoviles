@@ -21,8 +21,11 @@ interface TareaDao {
     suspend fun insert(tarea: Tarea)
 
     @Update
-    suspend fun update(tare: Tarea)
+    suspend fun update(tarea: Tarea)
 
     @Delete
     suspend fun delete(tarea: Tarea)
+
+    @Query("DELETE FROM tabla_tareas WHERE completada = 1")
+    suspend fun deleteCompletedTasks()
 }

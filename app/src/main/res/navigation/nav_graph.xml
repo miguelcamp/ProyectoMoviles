@@ -28,4 +28,9 @@
             android:name="title"
             app:argType="string" />
     </fragment>
+    <dialog
+        android:id="@+id/dialogoBorrarTodasLasCompletadasFragment"
+        android:name="edu.bo.ucb.agenda.ui.borrarTodasLasCompletadas.DialogoBorrarTodasLasCompletadasFragment"
+        android:label="DialogoBorrarTodasLasCompletadasFragment" />
+    <action android:id="@+id/action_global_dialogoBorrarTodasLasCompletadasFragment" app:destination="@id/dialogoBorrarTodasLasCompletadasFragment" />
 </navigation>

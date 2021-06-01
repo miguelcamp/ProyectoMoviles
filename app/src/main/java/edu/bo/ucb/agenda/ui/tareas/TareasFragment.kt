@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
@@ -64,6 +65,12 @@ class TareasFragment : Fragment(R.layout.fragment_tareas), TareasAdapter.onItemC
                 viewModel.alPresionarAgregarTarea()
             }
         }
+
+        setFragmentResultListener("añadir_editar_request") { _, bundle ->
+            val resultado = bundle.getInt("añadir_editar_result")
+            viewModel.alAñadirEditarResultado(resultado)
+        }
+
         viewModel.tareas.observe(viewLifecycleOwner) {
             tareasAdapter.submitList(it)
         }
@@ -78,11 +85,18 @@ class TareasFragment : Fragment(R.layout.fragment_tareas), TareasAdapter.onItemC
                             }.show()
                     }
                     is TareasViewModel.EventoTareas.NavegarAPantallaAgregar -> {
-                        val action = TareasFragmentDirections.actionTareasFragmentToAgregarEditarTareaFragment(null,"Nueva Tarea")
+                     val action = TareasFragmentDirections.actionTareasFragmentToAgregarEditarTareaFragment(null,"Nueva Tarea")
                         findNavController().navigate(action)
                     }
                     is TareasViewModel.EventoTareas.NavegarAPantallaEditar -> {
-                        val action = TareasFragmentDirections.actionTareasFragmentToAgregarEditarTareaFragment(event.tarea,"Editar Tarea")
+                       val action = TareasFragmentDirections.actionTareasFragmentToAgregarEditarTareaFragment(event.tarea,"Editar Tarea")
+                        findNavController().navigate(action)
+                    }
+                    is TareasViewModel.EventoTareas.MostrarMensajeConfirmacionTareaGuardada -> {
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
+                    }
+                    TareasViewModel.EventoTareas.NavegarAPantallaDeBorrarTodasLasCompletadas -> {
+                       val action = TareasFragmentDirections.actionGlobalDialogoBorrarTodasLasCompletadasFragment()
                         findNavController().navigate(action)
                     }
                 }.exhaustive
@@ -133,7 +147,7 @@ class TareasFragment : Fragment(R.layout.fragment_tareas), TareasAdapter.onItemC
                 true
             }
             R.id.accion_borrar_todas_las_tareas_completadas -> {
-
+                viewModel.alClickearBorrarTodasLasCompletadas()
                 true
             }
             else -> super.onOptionsItemSelected(item)
