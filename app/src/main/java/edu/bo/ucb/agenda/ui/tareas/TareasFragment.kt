@@ -32,6 +32,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class TareasFragment : Fragment(R.layout.fragment_tareas), TareasAdapter.onItemClickListener {
     private val viewModel: TareasViewModel by viewModels()
+    private lateinit var searchView:SearchView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -119,8 +120,13 @@ class TareasFragment : Fragment(R.layout.fragment_tareas), TareasAdapter.onItemC
         inflater.inflate(R.menu.menu_fragment_tareas, menu)
 
         val buscarItem = menu.findItem(R.id.accion_buscar)
-        val searchView = buscarItem.actionView as SearchView
+        searchView = buscarItem.actionView as SearchView
 
+        val pendingQuery = viewModel.searchQuery.value
+        if(pendingQuery != null && pendingQuery.isNotEmpty()){
+            buscarItem.expandActionView()
+            searchView.setQuery(pendingQuery,false)
+        }
         searchView.onQueryTextChange {
             viewModel.searchQuery.value = it
         }
@@ -152,5 +158,10 @@ class TareasFragment : Fragment(R.layout.fragment_tareas), TareasAdapter.onItemC
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        searchView.setOnQueryTextListener(null)
     }
 }
