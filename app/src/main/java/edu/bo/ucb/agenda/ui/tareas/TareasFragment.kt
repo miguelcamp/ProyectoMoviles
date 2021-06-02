@@ -100,6 +100,11 @@ class TareasFragment : Fragment(R.layout.fragment_tareas), TareasAdapter.onItemC
                        val action = TareasFragmentDirections.actionGlobalDialogoBorrarTodasLasCompletadasFragment()
                         findNavController().navigate(action)
                     }
+
+                    TareasViewModel.EventoTareas.NavegarACalendario -> {
+                        val action = TareasFragmentDirections.actionTareasFragmentToCalendarioFragment()
+                        findNavController().navigate(action)
+                    }
                 }.exhaustive
             }
         }
@@ -154,6 +159,10 @@ class TareasFragment : Fragment(R.layout.fragment_tareas), TareasAdapter.onItemC
             }
             R.id.accion_borrar_todas_las_tareas_completadas -> {
                 viewModel.alClickearBorrarTodasLasCompletadas()
+                true
+            }
+            R.id.mostrar_calendario -> {
+                viewModel.alClickearCalendario()
                 true
             }
             else -> super.onOptionsItemSelected(item)

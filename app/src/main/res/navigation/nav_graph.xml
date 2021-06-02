@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_tareasFragment_to_agregarEditarTareaFragment"
             app:destination="@id/agregarEditarTareaFragment" />
+        <action
+            android:id="@+id/action_tareasFragment_to_calendarioFragment"
+            app:destination="@id/calendarioFragment" />
     </fragment>
     <fragment
         android:id="@+id/agregarEditarTareaFragment"
@@ -33,4 +36,9 @@
         android:name="edu.bo.ucb.agenda.ui.borrarTodasLasCompletadas.DialogoBorrarTodasLasCompletadasFragment"
         android:label="DialogoBorrarTodasLasCompletadasFragment" />
     <action android:id="@+id/action_global_dialogoBorrarTodasLasCompletadasFragment" app:destination="@id/dialogoBorrarTodasLasCompletadasFragment" />
+    <fragment
+        android:id="@+id/calendarioFragment"
+        android:name="edu.bo.ucb.agenda.ui.calendario.CalendarioFragment"
+        android:label="Calendario"
+        tools:layout="@layout/fragment_calendario" />
 </navigation>

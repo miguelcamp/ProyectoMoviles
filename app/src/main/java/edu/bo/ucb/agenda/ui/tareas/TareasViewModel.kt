@@ -81,12 +81,17 @@ class TareasViewModel @ViewModelInject constructor(
     fun alClickearBorrarTodasLasCompletadas() = viewModelScope.launch {
         CanalEventoTareas.send(EventoTareas.NavegarAPantallaDeBorrarTodasLasCompletadas)
     }
+
+    fun alClickearCalendario() = viewModelScope.launch {
+        CanalEventoTareas.send(EventoTareas.NavegarACalendario)
+    }
     sealed class EventoTareas {
         object NavegarAPantallaAgregar : EventoTareas()
         data class NavegarAPantallaEditar(val tarea: Tarea) : EventoTareas()
         data class MostrarMensajeDeshacer(val tarea: Tarea) : EventoTareas()
         data class MostrarMensajeConfirmacionTareaGuardada(val msg: String) : EventoTareas()
         object NavegarAPantallaDeBorrarTodasLasCompletadas : EventoTareas()
+        object NavegarACalendario : EventoTareas()
     }
 
 
