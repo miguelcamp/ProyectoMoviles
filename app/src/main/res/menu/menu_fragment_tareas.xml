@@ -9,12 +9,6 @@
         app:showAsAction="always|collapseActionView" />
 
     <item
-        android:id="@+id/mostrar_calendario"
-        android:icon="@drawable/ic_baseline_calendar_today_24"
-        android:title="Mostrar Calendario"
-        app:showAsAction="always" />
-
-    <item
         android:icon="@drawable/ic_sort"
         android:title="Ordenar"
         app:showAsAction="always">
