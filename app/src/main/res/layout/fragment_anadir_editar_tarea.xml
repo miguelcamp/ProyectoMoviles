@@ -30,6 +30,12 @@
             android:layout_height="wrap_content"
             tools:text="Fecha de creacion:" />
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/text_view_fecha_limite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Fecha de Tarea:" />
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -33,6 +33,11 @@ class AgregarEditarTareaViewModel @ViewModelInject constructor(
             state.set("tareaImportante",value)
         }
 
+    var fechaLimite = state.get<String>("fechaLimite") ?: tarea?.fechaLimite ?:""
+        set(value){
+            field = value
+            state.set("fechaLimite",value)
+        }
     private val canalEventoAgregarEditarTarea = Channel<EventoAgregarEditarTarea>()
     val eventoAgregarEditarTarea = canalEventoAgregarEditarTarea.receiveAsFlow()
 

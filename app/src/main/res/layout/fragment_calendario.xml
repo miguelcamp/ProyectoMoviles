@@ -13,16 +13,17 @@
         android:layout_width="407dp"
         android:layout_height="529dp"
         android:clickable="false"
-        android:dateTextAppearance="@style/TextAppearance.AppCompat.Large"
-        android:selectedDateVerticalBar="@style/CalenderViewWeekCustomText"
+        android:dateTextAppearance="@style/TextAppearance.AppCompat.Display1"
         android:selectedWeekBackgroundColor="@color/teal_200"
-        android:theme="@style/CalenderViewCustom"
-        android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"
+        android:weekDayTextAppearance="@style/TextAppearance.AppCompat.Large"
         android:weekSeparatorLineColor="#FAFAFA"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

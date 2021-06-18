@@ -34,6 +34,9 @@ class AgregarEditarTareaFragment : Fragment(R.layout.fragment_anadir_editar_tare
             textViewFechaCreada.isVisible = viewModel.tarea != null
             textViewFechaCreada.text = "Creado: ${viewModel.tarea?.fechaCreacionFormateada}"
 
+            textViewFechaLimite.isVisible = viewModel.tarea != null
+            textViewFechaLimite.text =  viewModel.fechaLimite
+
             editTextTarea.addTextChangedListener {
                 viewModel.nombreTarea = it.toString()
             }
