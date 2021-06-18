@@ -163,10 +163,7 @@ class TareasFragment : Fragment(R.layout.fragment_tareas), TareasAdapter.onItemC
                 viewModel.alClickearBorrarTodasLasCompletadas()
                 true
             }
-            R.id.mostrar_calendario -> {
-                viewModel.alClickearCalendario()
-                true
-            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
