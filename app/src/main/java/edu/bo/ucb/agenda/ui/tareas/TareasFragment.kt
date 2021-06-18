@@ -67,9 +67,6 @@ class TareasFragment : Fragment(R.layout.fragment_tareas), TareasAdapter.onItemC
             fab_añadir_tarea.setOnClickListener{
                 viewModel.alPresionarAgregarTarea()
             }
-            button.setOnClickListener{
-                viewModel.alClickearFecha(editTextFecha.toString())
-            }
         }
 
         setFragmentResultListener("añadir_editar_request") { _, bundle ->

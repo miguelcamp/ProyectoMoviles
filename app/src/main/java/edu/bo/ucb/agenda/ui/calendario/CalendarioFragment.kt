@@ -15,7 +15,6 @@ import java.util.*
 class CalendarioFragment : Fragment(R.layout.fragment_calendario) {
     private val viewModel: TareasViewModel by viewModels()
     var date: String = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
-    private val CanalEventoTareas = Channel<TareasViewModel.EventoTareas>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

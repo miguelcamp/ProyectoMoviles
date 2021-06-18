@@ -16,7 +16,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import edu.bo.ucb.agenda.R
 import edu.bo.ucb.agenda.databinding.FragmentAnadirEditarTareaBinding
 import edu.bo.ucb.agenda.util.exhaustive
-import kotlinx.android.synthetic.main.fragment_anadir_editar_tarea.*
 import kotlinx.coroutines.flow.collect
 
 
@@ -47,15 +46,12 @@ class AgregarEditarTareaFragment : Fragment(R.layout.fragment_anadir_editar_tare
             checkboxImportante.setOnCheckedChangeListener { _, isChecked ->
                 viewModel.tareaImportante = isChecked
             }
-
-
             calendarViewTarea.setOnDateChangeListener(
                 OnDateChangeListener { view, year, month, dayOfMonth ->
                     val fecha = (dayOfMonth.toString() + "/"
                             + (month + 1) + "/" + year)
-
-                    // set this date in TextView for Display
                     textViewFechaLimite.text = fecha
+                    viewModel.fechaLimite = fecha
                 })
             fabGuardarTarea.setOnClickListener {
                 viewModel.onSaveClick()
