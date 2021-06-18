@@ -17,6 +17,8 @@ import edu.bo.ucb.agenda.R
 import edu.bo.ucb.agenda.databinding.FragmentAnadirEditarTareaBinding
 import edu.bo.ucb.agenda.util.exhaustive
 import kotlinx.coroutines.flow.collect
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 @AndroidEntryPoint
@@ -38,6 +40,15 @@ class AgregarEditarTareaFragment : Fragment(R.layout.fragment_anadir_editar_tare
 
             textViewFechaLimite.isVisible = viewModel.tarea != null
             textViewFechaLimite.text =  viewModel.fechaLimite
+
+            val formatter = SimpleDateFormat("dd/MM/yyyy")
+            formatter.setLenient(false)
+            if (viewModel.fechaLimite!=""){
+                val oldDate: Date = formatter.parse(viewModel.fechaLimite)
+                val oldMillis: Long = oldDate.getTime()
+
+                calendarViewTarea.setDate(oldMillis)
+            }
 
             editTextTarea.addTextChangedListener {
                 viewModel.nombreTarea = it.toString()
