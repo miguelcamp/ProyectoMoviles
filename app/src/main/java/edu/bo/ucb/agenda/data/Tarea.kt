@@ -14,6 +14,7 @@ data class Tarea(
     val importante: Boolean = false,
     val completada: Boolean = false,
     val creacion: Long = System.currentTimeMillis(),
+    val fechaLimite: String ="01/01/2021",
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 ) : Parcelable {
     val fechaCreacionFormateada: String

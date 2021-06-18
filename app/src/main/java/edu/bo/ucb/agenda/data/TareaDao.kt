@@ -11,11 +11,18 @@ interface TareaDao {
         OrdenFiltro.POR_NOMBRE -> getTareasOrdenadasPorNombre(query, ocultarCompletadas)
     }
 
+    fun getTareasDeFecha( fecha: String): Flow<List<Tarea>> {
+        return getTareasPorFechaEspecifica(fecha)
+    }
+
     @Query("SELECT * FROM tabla_tareas WHERE (completada != :ocultarCompletadas OR completada = 0) AND nombre LIKE '%' || :searchQuery || '%' ORDER BY importante DESC, nombre")
     fun getTareasOrdenadasPorNombre(searchQuery: String, ocultarCompletadas: Boolean): Flow<List<Tarea>>
 
     @Query("SELECT * FROM tabla_tareas WHERE (completada != :ocultarCompletadas OR completada = 0) AND nombre LIKE '%' || :searchQuery || '%' ORDER BY importante DESC, creacion")
     fun getTareasOrdenadasPorFechaDeCreacion(searchQuery: String, ocultarCompletadas: Boolean): Flow<List<Tarea>>
+
+    @Query("SELECT * FROM tabla_tareas WHERE (fechaLimite == :fecha OR completada = 0) ORDER BY importante DESC, creacion")
+    fun getTareasPorFechaEspecifica(fecha: String): Flow<List<Tarea>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(tarea: Tarea)

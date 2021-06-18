@@ -22,7 +22,7 @@ class ControladorPreferencias @Inject constructor(@ApplicationContext context: C
     val flowPreferencias = dataStore.data
         .catch {exception ->
             if(exception is IOException){
-                Log.e(TAG,"Error al leer las preferncias")
+                Log.e(TAG,"Error al leer las preferencias")
                 emit(emptyPreferences())
             }else{
                 throw exception

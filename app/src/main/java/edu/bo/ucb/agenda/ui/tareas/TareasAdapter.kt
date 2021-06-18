@@ -45,6 +45,7 @@ class TareasAdapter(private val listener: onItemClickListener) : ListAdapter<Tar
                 checkboxCompletado.isChecked = tarea.completada
                 textViewNombre.text = tarea.nombre
                 textViewNombre.paint.isStrikeThruText = tarea.completada
+                textViewFecha.text = tarea.fechaLimite
                 labelPrioridad.isVisible = tarea.importante
             }
         }

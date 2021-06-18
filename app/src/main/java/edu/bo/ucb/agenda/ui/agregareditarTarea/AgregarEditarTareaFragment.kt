@@ -2,6 +2,7 @@ package edu.bo.ucb.agenda.ui.agregareditarTarea
 
 import android.os.Bundle
 import android.view.View
+import android.widget.CalendarView.OnDateChangeListener
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -9,13 +10,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import edu.bo.ucb.agenda.R
 import edu.bo.ucb.agenda.databinding.FragmentAnadirEditarTareaBinding
 import edu.bo.ucb.agenda.util.exhaustive
 import kotlinx.coroutines.flow.collect
-import androidx.navigation.fragment.findNavController
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 @AndroidEntryPoint
 class AgregarEditarTareaFragment : Fragment(R.layout.fragment_anadir_editar_tarea) {
@@ -34,6 +38,18 @@ class AgregarEditarTareaFragment : Fragment(R.layout.fragment_anadir_editar_tare
             textViewFechaCreada.isVisible = viewModel.tarea != null
             textViewFechaCreada.text = "Creado: ${viewModel.tarea?.fechaCreacionFormateada}"
 
+            textViewFechaLimite.isVisible = viewModel.tarea != null
+            textViewFechaLimite.text =  viewModel.fechaLimite
+
+            val formatter = SimpleDateFormat("dd/MM/yyyy")
+            formatter.setLenient(false)
+            if (viewModel.fechaLimite!=""){
+                val oldDate: Date = formatter.parse(viewModel.fechaLimite)
+                val oldMillis: Long = oldDate.getTime()
+
+                calendarViewTarea.setDate(oldMillis)
+            }
+
             editTextTarea.addTextChangedListener {
                 viewModel.nombreTarea = it.toString()
             }
@@ -41,11 +57,19 @@ class AgregarEditarTareaFragment : Fragment(R.layout.fragment_anadir_editar_tare
             checkboxImportante.setOnCheckedChangeListener { _, isChecked ->
                 viewModel.tareaImportante = isChecked
             }
-
+            calendarViewTarea.setOnDateChangeListener(
+                OnDateChangeListener { view, year, month, dayOfMonth ->
+                    val fecha = (dayOfMonth.toString() + "/"
+                            + (month + 1) + "/" + year)
+                    textViewFechaLimite.text = fecha
+                    viewModel.fechaLimite = fecha
+                })
             fabGuardarTarea.setOnClickListener {
                 viewModel.onSaveClick()
             }
         }
+
+
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.eventoAgregarEditarTarea.collect { event ->

@@ -10,19 +10,46 @@
     <CalendarView
         android:id="@+id/calendarView"
         style="@android:style/Widget.DeviceDefault.Light.CalendarView"
-        android:layout_width="407dp"
-        android:layout_height="529dp"
+        android:layout_width="420dp"
+        android:layout_height="304dp"
         android:clickable="false"
-        android:dateTextAppearance="@style/TextAppearance.AppCompat.Large"
-        android:selectedDateVerticalBar="@style/CalenderViewWeekCustomText"
+        android:dateTextAppearance="@style/TextAppearance.AppCompat.Display1"
         android:selectedWeekBackgroundColor="@color/teal_200"
-        android:theme="@style/CalenderViewCustom"
-        android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"
+        android:weekDayTextAppearance="@style/TextAppearance.AppCompat.Large"
         android:weekSeparatorLineColor="#FAFAFA"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.555"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.283" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabGuardarTarea"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_margin="16dp"
+        android:contentDescription="TODO"
+        android:src="@drawable/ic_check_mark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/calendarView"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.917" />
+
+    <TextView
+        android:id="@+id/textViewFechaSeleccionada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fecha Seleccionada"
+        app:layout_constraintBottom_toTopOf="@+id/fabGuardarTarea"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendarView"
+        app:layout_constraintVertical_bias="0.487" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
