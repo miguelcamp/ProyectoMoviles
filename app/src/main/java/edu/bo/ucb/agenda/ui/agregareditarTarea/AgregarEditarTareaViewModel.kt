@@ -48,10 +48,10 @@ class AgregarEditarTareaViewModel @ViewModelInject constructor(
         }
 
         if (tarea != null) {
-            val tareaActualizada = tarea.copy(nombre = nombreTarea, importante = tareaImportante)
+            val tareaActualizada = tarea.copy(nombre = nombreTarea, importante = tareaImportante, fechaLimite = fechaLimite)
             actualizarTarea(tareaActualizada)
         } else {
-            val nuevaTarea = Tarea(nombre = nombreTarea, importante = tareaImportante)
+            val nuevaTarea = Tarea(nombre = nombreTarea, importante = tareaImportante, fechaLimite = fechaLimite)
             crearTarea(nuevaTarea)
         }
     }

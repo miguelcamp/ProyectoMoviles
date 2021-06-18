@@ -5,7 +5,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -17,21 +16,24 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import edu.bo.ucb.agenda.R
-import edu.bo.ucb.agenda.databinding.FragmentTareasBinding
 import dagger.hilt.android.AndroidEntryPoint
+import edu.bo.ucb.agenda.R
 import edu.bo.ucb.agenda.data.OrdenFiltro
 import edu.bo.ucb.agenda.data.Tarea
+import edu.bo.ucb.agenda.databinding.FragmentTareasBinding
 import edu.bo.ucb.agenda.util.exhaustive
 import edu.bo.ucb.agenda.util.onQueryTextChange
 import kotlinx.android.synthetic.main.fragment_tareas.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 @AndroidEntryPoint
 class TareasFragment : Fragment(R.layout.fragment_tareas), TareasAdapter.onItemClickListener {
     private val viewModel: TareasViewModel by viewModels()
+    var date: String = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
     private lateinit var searchView:SearchView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,6 +66,9 @@ class TareasFragment : Fragment(R.layout.fragment_tareas), TareasAdapter.onItemC
 
             fab_añadir_tarea.setOnClickListener{
                 viewModel.alPresionarAgregarTarea()
+            }
+            button.setOnClickListener{
+                viewModel.alClickearFecha(editTextFecha.toString())
             }
         }
 

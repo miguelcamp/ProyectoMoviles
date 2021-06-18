@@ -2,6 +2,7 @@ package edu.bo.ucb.agenda.ui.agregareditarTarea
 
 import android.os.Bundle
 import android.view.View
+import android.widget.CalendarView.OnDateChangeListener
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -9,13 +10,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import edu.bo.ucb.agenda.R
 import edu.bo.ucb.agenda.databinding.FragmentAnadirEditarTareaBinding
 import edu.bo.ucb.agenda.util.exhaustive
+import kotlinx.android.synthetic.main.fragment_anadir_editar_tarea.*
 import kotlinx.coroutines.flow.collect
-import androidx.navigation.fragment.findNavController
+
 
 @AndroidEntryPoint
 class AgregarEditarTareaFragment : Fragment(R.layout.fragment_anadir_editar_tarea) {
@@ -45,10 +48,21 @@ class AgregarEditarTareaFragment : Fragment(R.layout.fragment_anadir_editar_tare
                 viewModel.tareaImportante = isChecked
             }
 
+
+            calendarViewTarea.setOnDateChangeListener(
+                OnDateChangeListener { view, year, month, dayOfMonth ->
+                    val fecha = (dayOfMonth.toString() + "/"
+                            + (month + 1) + "/" + year)
+
+                    // set this date in TextView for Display
+                    textViewFechaLimite.text = fecha
+                })
             fabGuardarTarea.setOnClickListener {
                 viewModel.onSaveClick()
             }
         }
+
+
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.eventoAgregarEditarTarea.collect { event ->

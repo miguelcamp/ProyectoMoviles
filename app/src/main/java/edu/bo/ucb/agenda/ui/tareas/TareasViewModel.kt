@@ -94,6 +94,9 @@ class TareasViewModel @ViewModelInject constructor(
         object NavegarACalendario : EventoTareas()
     }
 
+    fun alClickearFecha(fecha:String){
+        tareaDao.getTareasDeFecha(fecha=fecha)
+    }
 
 
 }
